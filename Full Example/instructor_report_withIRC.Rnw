@@ -1,0 +1,586 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[letterpaper, margin = 1.0in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage [english]{babel}
+\usepackage [autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
+\usepackage{microtype}
+\usepackage{setspace}% http://ctan.org/pkg/setspace
+\AtBeginEnvironment{tabular}{\singlespacing}% Single spacing in tabular environment
+\usepackage{booktabs}
+\usepackage{titling}
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+
+\setlength{\droptitle}{-6em}   %Move title up 5
+\renewcommand\maketitlehookb{\vspace{-3em}}  %Remove space after title
+\renewcommand\maketitlehookc{\vspace{-2em}}  %Remove space after authors
+\renewcommand\maketitlehookd{\vspace{-3em}}  %Remove space after date
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DEFINING VARIABLES (START)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% In this section, define the variables that change from semester to semester or
+%% From user to user 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% ----COURSE INFO---
+\newcommand{\ClassNumber}{ME 274}		% Format ex: ME 274
+\newcommand{\SemYear}{Spring 2018}		%Format ex: Spring 2018
+
+%% ----REPORT HEADER INFO---
+\author{Author Name1, Author Name2}
+\title{\ClassNumber~Fundamentals Exam Summary Report: \SemYear \thanks{The source code that produced this report accompanied a journal manuscript that is in review.  For more details on how to prepare and interpret the results in this report, please watch for the journal article to be published.}} 
+\lhead{\ClassNumber~FE Summary: \SemYear}
+
+%% ---- INFO NEEDED FOR THE R CODE ---
+%% ---- USERS SHOULD ONLY EDIT THE FOLLOWING CODE CHUNK!!! ---
+<<DEFINE.VARIABLES, include=FALSE>>=
+
+## ONLY ITEMS IN THIS BLOCK should be updated by the user.
+
+## THE USER SHOULD MAKE NO UPDATES IN ANY OTHER BLOCK.
+
+## ALL FILES (including this one, plus roster and response files) should be placed in the SAME DIRECTORY.  
+
+## ----SET WORKING DIRECTORY---
+## SET THE WORKING DIRECTORY to the folder with all the source and data files
+## Do this by the RStudio menu options (under 'Session') or the code below
+# setwd("C:/MY/WORKING/DIRECTORY")
+
+
+## ----COURSE INFORMATION---
+YEARSEM <- "2018Sp"     #Used in the filename of the results .csv
+
+# These are the number of the sections of the course. Examples:
+# SEC_NUMS <- c(1)                 # 1 section, called Section 1
+# SEC_NUMS <- c(1,2)             # 2 sections, called Sections 1 and 2
+# SEC_NUMS <- c(1,2,3)           # 3 sections, and so forth
+SEC_NUMS <- c(1,2,3,4)         # 4 sections
+# These numbers must match the sections numbers listed on the overall course roster
+
+## ----ASSESSMENT INFORMATION---
+ASSESSMENT_NAME <- "FE" #Used in the filename of the results .csv, so keep it short with no spaces!
+NUM_ITEMS <- 12  #Number of items on the assessment
+
+## ----ITEM/CONCEPT DESCRIPTIONS---
+# These item descriptions will be used in a results table in the instructors report, so keep them short.
+
+# For the 12-item example:
+ITEM_DESCRIPTIONS <- c("Q1. Speed Time History",
+                       "Q2. Kinetic Energy Time History",
+                       "Q3. Cross Product: Conceptual",
+                       "Q4. Free Body Diagrams",
+                       "Q5. Chain Rule",
+                       "Q6. Vector Projection: Unit Vector",
+                       "Q7. Cross Product: Calculation",
+                       "Q8. Friction",
+                       "Q9. FBD and Multibody Systems",
+                       "Q10. Vector Projection: Coord. System",
+                       "Q11. Vector Projection: Rotated Coord. System",
+                       "Q12. Moments")
+
+# For a potential 5-item MCT:
+# ITEM_DESCRIPTIONS <- c("Q1. Speed Time History", 
+#                        "Q2. Kinetic Energy Time History", 
+#                        "Q3. Cross Product: Conceptual", 
+#                        "Q4. Free Body Diagrams", 
+#                        "Q5. Chain Rule")
+
+############################## ##
+## Load Data
+############################## ##
+## ----Load Class Rosters---
+# Raw roster; edit to use the correct file name
+rawRoster <- read.csv("CourseRosters_Example_2018Sp.csv", stringsAsFactors=FALSE) 
+
+## ----Indicate Location of Required Columns (for the Class Roster File)---
+# USERS: edit the line below to indicate the columns of the roster file that include the 
+# following items IN THIS ORDER:
+#      - Name (1 column; format: first last; 
+#               or you may just choose last name if you have different columns for first and last name)
+#      - Email (1 column; format: myname@myinstitution.edu)
+#      - Section number (1 column; format: a single interger indicating section number;
+#                         if you have only one section, just populate a column of ones)
+ROSTER_COLUMN_NUMBERS <- c(5,6,1) #Remember: Name, Email, Section Number
+##  ----Rename the Roster Columns ---
+ROSTER_COLUMN_NAMES <- c("Name","Email","SectionID")
+roster <- rawRoster[,ROSTER_COLUMN_NUMBERS]        # choose the subset of columns specified above
+names(roster) <- ROSTER_COLUMN_NAMES        # assign the names to the columns
+
+## ----Load the Student Responses from Gradescope---
+# Import raw responses; edit line below to use correct file name
+rawResponses <- read.csv("FE_GradescopeScores_Example_2018Sp_12items.csv", stringsAsFactors=FALSE) 
+
+## ----Indicate Location of Required Columns (for the Responses File)---
+# USERS: edit the line below to indicate the columns of the roster file that include the 
+# following items IN THIS ORDER:
+#      - Name (1 column; format: first last)
+#      - Email (1 column; format: myname@myinstitution.edu)
+#      - All question columns, in order (as many columns as items on the MCT)
+RESPONSE_COLUMN_NUMBERS <- c(1,2,3,4,5,6,7,8,9,10,11,12,13,14) #REMEMBER: Name, Email, Items
+responses <- rawResponses[,RESPONSE_COLUMN_NUMBERS]  # choose the subset of columns specified above
+
+## ----DATA COLUMN NAMES---
+# Data from Gradescope (or another source) may have the raw data with undesired, long, or
+# otherwise cumbersome column names. The names below are simple and used throughout the code.
+#
+# The "Name" and "Email" column names are required to be as shown.
+#
+# This code is built around the "Q_" prefix in the label for all MCT items. 
+#   We recommend not changing this convention.
+
+# For the 12-item example:
+RESPONSE_COLUMN_NAMES <- c("Name", "Email", "Q_01", "Q_02", "Q_03", "Q_04",
+                  "Q_05","Q_06", "Q_07", "Q_08",
+                  "Q_09", "Q_10", "Q_11", "Q_12")
+
+# For a potential 5-item MCT:
+#RESPONSE_COLUMN_NAMES <- c("Name", "Email", "Q_01", "Q_02", "Q_03", "Q_04", "Q_05")
+
+names(responses) <- RESPONSE_COLUMN_NAMES     # assign the names of the columns of the response data
+
+## ----ANSWER KEY FILE---
+# The format for this file should be:
+#   rows = items 
+#   column = answers (e.g., "A")
+rawAnswerKey <- read.csv("FE_AnswerKey_12items.csv", stringsAsFactors=FALSE) #Import raw answer key file
+answerKey <- rawAnswerKey      # save answer key as a new variable that we will work with in the code
+COLUMN_WITH_ANSWERS <- 2       # the column of this file with the correct answers (each row is an item)
+
+############################## ##
+## DATA MANAGEMENT (MERGE ROSTER AND RESPONSES)
+############################## ##
+#
+## ---- Merge the roster and response variables so that the unified variable has name, email, and
+# section number along with all the responses
+rosterResponses <- merge(roster, responses, by.x = "Email", by.y = "Email", all.x = TRUE) 
+rosterResponses <- subset(rosterResponses, select = c(-Name.x)) 
+     # Remove one of the name columns after the merge
+     # If you want to keep the response-file Name column, you would have "select = c(-Name.x)" in the line above
+     # If you want to keep the roster-file Name column, you would have "select = c(-Name.y)" in the line above
+names(rosterResponses)[which(names(rosterResponses) == 'Name.y')] <- 'Name'
+     # Clean up (rename) the column name of the remaning 'Name' column
+
+## ----Organize the Columns ---
+# After the merge, the columns might be in an odd order
+# We prefer the order of Name, Email, SectionID, and then all the question columns
+iItems <- grepl("Q_", names(rosterResponses))     #Find all columns with Q_ in their names
+rosterResponses <- rosterResponses[, c("Name", "Email", "SectionID", colnames(rosterResponses)[iItems])]
+
+## ----Organize the Rows ---
+# Order the rows by section number first, then email
+# You could change this to order by name also, but our example uses a Name column with 
+#   full names, so this would order the students by first name
+rosterResponses <- rosterResponses[order(rosterResponses$SectionID, rosterResponses$Email), ]
+
+# If someone on the roster did not complete the MCT, remove them from the analysis
+rosterResponses <- rosterResponses[complete.cases(rosterResponses),]
+
+#### ##
+# The variable 'rosterResponses' now holds all the relevant information for each student
+#### ##
+
+## ----CODEBOOK FOR GRADESCOPE SCORES---
+# The students' scores from Gradescope may represent a code for a specific response.
+# For example, a Gradescope score of 1 may correspond to a response of "A" on a multiple-choice question.
+# If this is not the case, you can:
+# 1. Modify the code below
+# 2. Populate the GS_SCORE and CORRESPONDING_RESPONSE variables with the same information
+CODEBOOK <- data.frame(GS_SCORE = c(1:7)) #A variable within a data frame that includes all the Gradescope scores
+CODEBOOK$CORRESPONDING_RESPONSE <- c("A", "B", "C", "D", "E", "M", "N")  #A variable within the data frame for the students' responses that correspond to the GS scores
+#####
+
+@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DEFINING VARIABLES (END)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% INSTRUCTOR REPORT (START)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\maketitle
+
+<<Libraries, include=FALSE>>=
+## ----Install packages----
+library(knitr)
+library(xtable)
+library(stats)
+library(tidyr)
+library(ggplot2)
+library(grid)
+library("gridExtra")
+library(RColorBrewer)
+
+@
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% GRADE THE ASSESSMENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The code in the block below grade the responses from Gradescope and save some files in the working directory
+
+<<Calculations, include=FALSE>>=
+
+## Find response columns in the 'rosterResponses' variable 
+# (note the columns changed order from when we did this in the block above because we organized the columns)
+iItems <- grepl("Q_", names(rosterResponses))     #Find all columns with Q_ in their names
+
+
+## Change from number codes to responses (for MC responses) ##
+respOnly <- rosterResponses[ ,iItems] #Pull the columns for the items out of the larger data frame
+for (entry in 1:length(CODEBOOK$GS_SCORE)) {
+  respOnly[respOnly == CODEBOOK$GS_SCORE[entry]] <- CODEBOOK$CORRESPONDING_RESPONSE[entry]
+}
+rosterResponses[ ,iItems] <- respOnly  #Replace numbered responses with letter responses
+
+############################## ##
+## Grade Responses
+############################## ##
+## ----Compare Gradescope responses to correct answers---
+## Create answer matrix, to which the respondent response matrix will be compared
+answerKey_matrix <- t(matrix(answerKey[, COLUMN_WITH_ANSWERS],NUM_ITEMS, dim(rosterResponses[ , iItems])[1]))  # matrix of answer key values
+
+## Grade Responses
+#Compare Gradescope responses to correct answers
+gradedResponses <- (rosterResponses[ ,iItems] == answerKey_matrix) * 1  # multiple by 1 to change from logic to numeric (0 = incorrect, 1 = correct)
+#Make the column names start with a "G" for "graded" (e.g., GQ_01 = Graded Question 1)
+# to change the names of the graded response columns, use something like this...
+colnames(gradedResponses) <- paste("G", colnames(gradedResponses), sep = "")
+
+
+############################## ##
+## Create datasets of results
+############################## ##
+## ----Roster Data and Total Scores---
+allData <- cbind(rosterResponses,gradedResponses)
+  # this variable now contains both the actual responses (a,b,c,...) and the binary graded variable (0 = incorrect, 1 = correct)
+
+## ----Total Score---
+allData$NumberCorrect <- rowSums(gradedResponses)  # number correct
+
+
+############################## ##
+## Summary Statistics for Total Score
+##  --Overall and by section
+############################## ##
+## ----Prepare the matrix:---
+summaryStats <- matrix(nrow = (length(SEC_NUMS)+1), ncol = 6) #Initial the matrix that will store all the data for Table 1 in the instructor report (summary of total scores by sections)
+colnames (summaryStats) <- c("Minimum", "1st Quartile", "Median", "Mean", "3rd Quartile", "Maximum") #Column names
+row.names(summaryStats) <- c(1:(length(SEC_NUMS)+1)) #Placeholder for row names
+row.names(summaryStats)[1] <- "All Sections"
+for(ii in 1:length(SEC_NUMS)){
+  row.names(summaryStats)[ii+1] <- paste("Section", SEC_NUMS[ii], sep = " ")
+}
+
+## ----Calculate the stats for total scores---
+#Overall:
+summaryStats[1,1:6] <- t(as.matrix(summary(as.numeric(allData[ , "NumberCorrect"]) )))[1:6] #Don't include the NA column because if no NAs, it throws an error.
+
+#By Section:
+for(ii in 1:length(SEC_NUMS)){
+  summaryStats[(ii+1),1:6] <- t(as.matrix(summary(as.numeric(allData[allData$SectionID == ii , "NumberCorrect"]) )))[1:6]
+}
+#summaryStats
+
+## ----Organize the data columns in a specific order:---
+summaryStats <- summaryStats[ , c("Mean", "Median", "Minimum", "Maximum", "1st Quartile", "3rd Quartile")]
+
+############################## ##
+## Summary Statistics for Each Question
+##  --Overall and by section
+############################## ##
+## ----Prepare the matrix:---
+questStats <- matrix(nrow = NUM_ITEMS, ncol = (length(SEC_NUMS)+1)) #Initialize the matrix that will store the data for Table 2 in the instructor report (summary of item-level performance)
+row.names(questStats) <- RESPONSE_COLUMN_NAMES[grepl("Q_", RESPONSE_COLUMN_NAMES)] #Name the rows for each item
+colnames(questStats) <- c(1:(length(SEC_NUMS)+1)) #Placeholder for column names
+# In the table that is included in the report, a multi-column header of "Section" is used;
+# Therefore, no "Section" is needed in these column headers; just numbers
+colnames(questStats)[1] <- "All"
+for(ii in 1:length(SEC_NUMS)){
+  colnames(questStats)[ii+1] <- paste(SEC_NUMS[ii], sep = "")
+}
+
+## ----Calculate the question-level stats---
+iGQ <- grepl("GQ_", colnames(allData))
+#All sections:
+questStats [ , 1] <- colMeans(allData[, iGQ], na.rm = TRUE) #Finds the column averages for all columns with graded item responses
+
+#By Section:
+for(ii in 1:length(SEC_NUMS)){
+  questStats [ , (ii+1)] <- colMeans(allData[allData$SectionID == SEC_NUMS[ii],  iGQ], na.rm = TRUE) #Finds column means for graded data by section
+}
+#questStats
+
+############################### ##
+## Output (save) Results
+############################### ##
+## ----Write the roster info, item-level responses, graded responses, and overall score to a .csv file---
+#All sections:
+write.csv(allData, "FE_Results_QuestionLevel.csv", row.names = FALSE)
+
+
+#By Section:
+for(ii in 1:length(SEC_NUMS)){
+  tempNamePath <- paste0(ASSESSMENT_NAME, "_Section", SEC_NUMS[ii], "_", YEARSEM, ".csv")
+  write.csv(allData[allData$SectionID == ii, ], tempNamePath, row.names = FALSE)
+}
+
+@
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% CREATE AND SAVE THE ITEM RESPONSE CURVES FOR EACH QUESTION
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This section of the code creates the item response curves that are used in the instructor report
+
+<<IRC.calcs, include=FALSE>>=
+allData$TotalScore <- factor(allData$NumberCorrect, levels = c(1:NUM_ITEMS)) #This makes a new variable that is a factor with levels equal to all possible number of correct items
+
+iItems <- grepl("Q_", names(allData)) #Find all columns that have Q_ in the name
+
+allData[, iItems] <- lapply(allData[,iItems], factor, levels = CODEBOOK$CORRESPONDING_RESPONSE)  #This makes sure that the response column for each item has levels equal to every possible response to the items
+
+AbilityLevels <- levels(allData$TotalScore) #The discrete ability levels of the students correspond to the possible total scores on the assessment
+proportionsPost <- list() #Proportion of students within an ability level that chose a certain response
+casesPost <- list() #The students that fall within a certain ability level
+
+iqstn <- which(iItems) #column indices for the item responses
+## ----Calculate IRC Data---
+# For each item and each ability level, find the proportion of students in that ability level that answered each answer choice
+for (qstn in 1:length(iqstn)){
+  tempMatrix <- matrix(nrow = length(AbilityLevels), ncol = 1+length(CODEBOOK$CORRESPONDING_RESPONSE)) #Initialize a matrix that is just used within this loop; it will store the proportions of each answer choice (columns) for each level of total score (rows, and first column)
+  tempCases <- matrix(nrow = length(AbilityLevels), ncol = 2) #Initialize a matrix that is just used within this loop; stores total scores and number of cases/students that have that total score
+  #Name the columns and rows:
+  colnames(tempMatrix) <- c("TotalScore", CODEBOOK$CORRESPONDING_RESPONSE)
+  rownames(tempMatrix) <- AbilityLevels
+  colnames(tempCases) <- c("TotalScore", "NumberCases")
+  rownames(tempCases) <- AbilityLevels
+  #Populate the first column of the two temp matrices with the ability levels:
+  tempMatrix[ , 1] <- as.numeric(AbilityLevels)
+  tempCases[ , 1] <- as.numeric(AbilityLevels)
+  #Calculate the proportion of students within a given ability level that chose each answer choice:
+  for (abLev in 1:length(AbilityLevels)){
+    tempMatrix [abLev, 2:8]<- table(allData[allData$TotalScore == AbilityLevels[abLev], iqstn[qstn]])/sum(table(allData[allData$TotalScore == AbilityLevels[abLev], iqstn[qstn]]))
+    tempCases [abLev, 2] <- sum(table(allData[allData$TotalScore == AbilityLevels[abLev], iqstn[qstn]]))
+  }
+  #Fix cells that had a zero in the denominator (no one chose that response)
+  tempMatrix[tempMatrix == "NaN"] <- 0
+  #Reshape the matrix into a long data format:
+  tempLong <- gather_(as.data.frame(tempMatrix),key = "Letter", value = "Proportion", gather_cols = CODEBOOK$CORRESPONDING_RESPONSE, factor_key=TRUE)
+  tempLong$Proportion <- as.numeric(tempLong$Proportion)
+  tempLong$TotalScore <- as.numeric(tempLong$TotalScore)
+  #Save the temporary matrices into lists that will be used in the rest of the code:
+  proportionsPost[[qstn]]<- tempLong
+  casesPost[[qstn]] <- as.data.frame(tempCases)
+}
+
+@
+
+<<IRC.plots, out.width='0.7\\textwidth', warning=FALSE, include=FALSE>>=
+#Function for rounding to the nearest multiple of a specified number (e.g., rounding to the nearest multiple of 5)
+mround <- function(x,base){ 
+        base*ceiling(x/base)}
+histUpper <- mround(max(casesPost[[1]]$NumberCases), 5) #To get the y limit for the histogram (round up to nearest 5)
+colourCount = length(CODEBOOK$CORRESPONDING_RESPONSE) #How many colors do we need for the IRC curves?  How many answer choices were there (plus any "No Response" or "Multiple Response" options)
+getPalette = colorRampPalette(brewer.pal(colourCount, "Dark2")) #Use this color palette
+cPal <- getPalette(colourCount) #Create the array of colors
+
+plotList <- list() #Initialize a list that will store all the IRC plots
+
+## ----Create and store the IRC plots in a list ---
+for (i in 1:NUM_ITEMS){
+  ## ----IRC plot---
+  IRCpost <- ggplot(proportionsPost[[i]], aes(x = TotalScore, y = Proportion, group = Letter)) + 
+    geom_point(aes(shape = Letter, colour = Letter, fill = Letter), size = 3) +
+    scale_shape_manual(values=rep(c(21, 22, 23, 24, 7, 8, 10, 11, 12, 13, 14)), name="Response") +
+    scale_colour_manual(values = cPal, name="Response") +
+    scale_fill_manual(values = cPal, name="Response") +
+    xlab("Total Test Score") +
+    ylab("Proportion of Students With a Given Total Score \n Selecting a Given Answer Choice")+
+    scale_x_continuous(limits = c(0, NUM_ITEMS+1), expand = c(0, 0), 
+                       breaks = as.numeric(AbilityLevels)) +
+    scale_y_continuous(limits = c(0, 1.05), expand = c(0, 0), 
+                       breaks = c(0, 0.25, 0.5, 0.75, 1.0, 1)) +
+    theme_bw() +
+    theme(legend.box = "horizontal") +
+    theme(legend.position="bottom") +
+    guides(shape = guide_legend(nrow = 1)) +
+    labs(title = "Distribution of Responses for Each Total Test Score",
+       subtitle = paste("Correct Answer:", answerKey_matrix[1,i])) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    theme(plot.title = element_text(size=12)) +
+    theme(plot.title = element_text(size=12)) +
+    theme(plot.subtitle = element_text(hjust = 0.5)) +
+    theme(text = element_text(family="serif",size=10), 
+          axis.text.x = element_text(family="serif",size = 10, angle=60, hjust=1), 
+          axis.text.y = element_text(family="serif",size = 10), 
+          panel.background = element_rect(fill = "white")) +
+    theme(plot.margin = unit(c(9, 10, 5.5, 5.5), "points"))
+   
+  
+  ## ----Histogram of ability levels---
+  #Placed above the IRC, so that instructors can see how many students were in each ability level
+  histIRCpost <- ggplot(casesPost[[i]]) + 
+    geom_bar(aes(x=TotalScore,y=NumberCases),stat="identity", fill="steelblue") +
+    xlab("Total Test Score") +
+    ylab("Number of \n Students") +
+    labs(title = "Number of Students with a Given Total Test Score") +
+    scale_x_continuous(limits = c(0, NUM_ITEMS+1), expand = c(0, 0), breaks = as.numeric(AbilityLevels),
+                       minor_breaks = as.numeric(AbilityLevels)) +
+    scale_y_continuous(limits = c(0, histUpper), expand = c(0, 0)) +
+    theme_bw() +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    theme(plot.title = element_text(size=12))  +
+    theme(text = element_text(family="serif",size=10), 
+          axis.text.x = element_text(family="serif",size = 10, angle=60, hjust=1), 
+          axis.text.y = element_text(family="serif",size = 10), 
+          panel.background = element_rect(fill = "white")) +
+    theme(plot.margin = unit(c(9, 10, 5.5, 15), "points")) +
+    annotate(geom="text", x=0.5, y=.5*histUpper, 
+             label=paste("n =", length(which(!is.na(allData[ , iqstn[i]])))), 
+             color="black", family = "serif", hjust = 0, size = 3)
+
+
+
+## ----Combine the IRC plot and the histogram---
+g <- arrangeGrob(histIRCpost, IRCpost, 
+        ncol=1, nrow=2, widths=c(5), heights=c(2, 5))
+
+#grid.draw(g) #Plots the combined plots
+plotList[[i]] <- g #Saves the combined plots in the list of plots
+
+##  ----Save Images of the Combined Plots in Working Directory ---
+filename <- paste("IRC_", i, ".png", sep = "")
+ggsave(file = filename, g, width=5.5, height=7, units = "in", limitsize = TRUE)
+}
+
+@
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% INSTRUCTOR SUMMARY REPORT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%This is where the actual content that is shown in the report starts.
+
+\section*{Overall Performance}
+Table \ref{table:summaryStats} lists the descriptive statistics for your students' total scores (the total number of questions correct). 
+<<sum.Table, results='asis', echo=FALSE>>=
+#summaryStats
+
+print(xtable(summaryStats[ , 1:6],
+             caption="Summary Statistics for Overall Number of Questions Correct",
+             label="table:summaryStats", align = c("l","c","c","c","c","c","c")),
+      include.rownames=TRUE,
+      caption.placement="top",
+      booktabs=TRUE
+      )
+@
+\FloatBarrier
+
+\section*{Performance By Question}
+Table \ref{table:questStats} details the proportion of correct responses for each question on the assessment.  
+
+%\newpage
+
+<<quest.Table, results='asis', echo=FALSE>>=
+
+questStatsTopic <- questStats #Make a new table that we will manipulate
+rownames(questStatsTopic) <- ITEM_DESCRIPTIONS
+questStatsTopicOrder <- questStatsTopic[order(questStatsTopic[, 1],decreasing = TRUE), ]
+#questStatsTopicOrder
+
+colAlign <- c("l", "c", rep("c",length(SEC_NUMS)))
+
+print(xtable(questStatsTopicOrder,
+             caption="Proportion of Students That Answered Question Correctly",
+             label="table:questStats", align = colAlign),
+      include.rownames=TRUE,
+      caption.placement="top",
+      booktabs=TRUE,
+      hline.after=NULL, #We don't need hline; we use booktabs
+      add.to.row = list(pos = list(-1,
+                                   0,
+                                   nrow(questStatsTopicOrder)
+                                   ),
+                        command = c(paste("\\toprule \n",
+                                          paste0("& \\multicolumn{", length(SEC_NUMS)+1, "}{c}{Section}\\\\\n"),
+                                          paste0("\\cline{2-",length(SEC_NUMS)+2,"} \n")),
+                                    "\\midrule \n",
+                                    "\\bottomrule \n"
+                                    )
+                                    
+                        )
+                        
+      )
+
+
+
+@
+
+\newpage
+
+\section*{How Did Your Students Answer the Questions?}
+This section details how your students answered each of the questions.  The ``item response curves'' (IRCs) show how students with different overall test scores answered the questions.  
+
+\subsection*{How to Read the IRC Plots}
+
+\subsubsection*{Top Plot: Histogram of Total Scores}
+The top plot is a histogram of the students' total test scores. It is repeated above every IRC for easy reference.  The information in the IRC is most reliable for the total test scores that students earned most frequently because the information is averaged over many students.  Thus, the information in the IRCs for the extreme scores is less reliable than the information near the median score.
+
+\subsubsection*{Bottom Plot: IRCs}
+The IRC plots should be read vertically for each total score.  In other words, for a given total test score, instructors should read vertically to see what proportion of students with that score selected a given answer choice.
+
+However, the pattern of the proportion of a given answer option across total test scores can also be insightful.  
+\begin{itemize}
+	\item Ideally, the correct answer should draw an `s-shaped' curve when viewing the responses from lowest to highest total score.  This s-shaped curve indicates that the item clearly discriminates between those who understand the concept and those who do not, and it also likely reflects the validity and clarity of the question.
+	\item IRCs for incorrect answers that look like inverted s-curves (higher for low scores and curving down to no responses for high scores) indicate high-functioning distractors.  These answers probably correspond to common misconceptions about the topic being assessed.
+	\item Answer options that were chosen infrequently across all total test scores are low-functioning distractors because students do not consider them viable answers. You may want to revise or replace these answer choices.
+\end{itemize}
+
+\noindent \underline{Example:}  Suppose answer "C" was a popular choice for lower-performing students, and answer "B" (the correct answer) was popular with higher-performing students.  This scenario may imply that answer "C" is a common misconception that the instructor may want to address in class.
+
+\subsubsection*{Summary and More Information} 
+In summary, instructors can quickly look at the IRC patterns of: (i) lower-performing students to better understand what misconceptions the students may be harboring, and (ii) higher-performing students for evidence of question validity.  \\
+
+\noindent More information can be found in the following references:
+\begin{footnotesize}
+	\begin{itemize}
+	  \item Morris, G. A., Harshman, N., Branum-Martin, L., Mazur, E., Mzoughi, T., \& Baker, S. D. (2012). An item response curves analysis of the Force Concept Inventory. \textit{American Journal of Physics, 80}(9), 825-831. doi:10.1119/1.4731618
+	  \item Morris, G. A., Branum-Martin, L., Harshman, N., Baker, S. D., Mazur, E., Dutta, S., . . . McCauley, V. (2006). Testing the test: Item response curves and test quality. \textit{American Journal of Physics, 74}(5), 449-453. doi:10.1119/1.2174053
+	\end{itemize}
+\end{footnotesize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Insert the IRC plots to the instructor report
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%This section loops through all the IRC plots and inserts them into the instructor report
+<<loop.question.IRC, echo=FALSE, results='asis', warning=FALSE>>= 
+for (itemNum in c(1:NUM_ITEMS)){ 
+  cat(paste("\\subsection*{",ITEM_DESCRIPTIONS[itemNum],"}", sep="")) 
+  #print(grid.arrange(plotList[[itemNum]]))
+  #grid.draw(plotList[[itemNum]])
+  cat(paste("\\includegraphics[width=\\maxwidth]{IRC_", itemNum,".png}", sep="")) 
+  cat(paste("\\newpage", sep = ""))
+  }
+
+@
+
+
+\newpage
+
+\end{document}

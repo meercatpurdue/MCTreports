@@ -1,0 +1,292 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[letterpaper, margin = 1.0in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage [english]{babel}
+\usepackage [autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
+\usepackage{microtype}
+\usepackage{setspace}% http://ctan.org/pkg/setspace
+\AtBeginEnvironment{tabular}{\singlespacing}% Single spacing in tabular environment
+\usepackage{booktabs}
+\usepackage{titling}
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+
+\setlength{\droptitle}{-6em}   %Move title up 5
+\renewcommand\maketitlehookb{\vspace{-3em}}  %Remove space after title
+\renewcommand\maketitlehookc{\vspace{-2em}}  %Remove space after authors
+\renewcommand\maketitlehookd{\vspace{-3em}}  %Remove space after date
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DEFINING VARIABLES (START)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% In this section, define the variables that change from semester to semester or
+%% From user to user 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% ----COURSE INFO---
+\newcommand{\ClassNumber}{ME 274}		% Format ex: ME 274
+\newcommand{\SemYear}{Spring 2018}		%Format ex: Spring 2018
+
+%% ----REPORT HEADER INFO---
+\author{Author Name1, Author Name2}
+\title{\ClassNumber~Fundamentals Exam Summary Report: \SemYear \thanks{The source code that produced this report accompanied a journal manuscript that is in review.  For more details on how to prepare and interpret the results in this report, please watch for the journal article to be published.}} 
+\lhead{\ClassNumber~FE Summary: \SemYear}
+
+%% ---- INFO NEEDED FOR THE R CODE ---
+%% ---- USERS SHOULD ONLY EDIT THE FOLLOWING CODE CHUNK!!! ---
+<<DEFINE.VARIABLES, include=FALSE>>=
+## ONLY ITEMS IN THIS BLOCK should be updated by the user.
+
+## THE USER SHOULD MAKE NO UPDATES IN ANY OTHER BLOCK.
+
+## ALL FILES (including this one, plus roster and response files) should be placed in the SAME DIRECTORY.  
+
+## ----SET WORKING DIRECTORY---
+## SET THE WORKING DIRECTORY to the folder with all the source and data files
+## Do this by the RStudio menu options (under 'Session') or the code below
+# setwd("C:/MY/WORKING/DIRECTORY")
+
+
+## ----COURSE INFO---
+YEARSEM <- "2018Sp"  #Used in the filename of the results .csv
+
+# These are the number of the sections of the course. Examples:
+# SEC_NUMS <- c(1)                 # 1 section, called Section 1
+# SEC_NUMS <- c(1,2)             # 2 sections, called Sections 1 and 2
+# SEC_NUMS <- c(1,2,3)           # 3 sections, and so forth
+SEC_NUMS <- c(1,2,3,4)         # 4 sections
+# These numbers must match the sections numbers listed on the overall course roster
+
+## ----ASSESSMENT INFORMATION---
+ASSESSMENT_NAME <- "FE" #Used in the filename of the results .csv, so keep it short with no spaces!
+NUM_ITEMS <- 12  #Number of items on the assessment
+
+
+## ----ITEM/CONCEPT DESCRIPTIONS---
+#These item descriptions will be used in a results table in the instructors report, so keep them short.
+
+# For the 12-item example:
+ITEM_DESCRIPTIONS <- c("Q1. Speed Time History",
+                       "Q2. Kinetic Energy Time History",
+                       "Q3. Cross Product: Conceptual",
+                       "Q4. Free Body Diagrams",
+                       "Q5. Chain Rule",
+                       "Q6. Vector Projection: Unit Vector",
+                       "Q7. Cross Product: Calculation",
+                       "Q8. Friction",
+                       "Q9. FBD and Multibody Systems",
+                       "Q10. Vector Projection: Coord. System",
+                       "Q11. Vector Projection: Rotated Coord. System",
+                       "Q12. Moments")
+
+# For a potential 5-item MCT:
+# ITEM_DESCRIPTIONS <- c("Q1. Speed Time History", 
+#                        "Q2. Kinetic Energy Time History", 
+#                        "Q3. Cross Product: Conceptual", 
+#                        "Q4. Free Body Diagrams", 
+#                        "Q5. Chain Rule")
+
+############################## ##
+## Load Data
+############################## ##
+## ----Load the GRADED Student Responses from Gradescope---
+# Import raw responses; edit line below to use correct file name
+rawGradedResponses <- read.csv("FE_Results_QuestionLevel.csv", stringsAsFactors=FALSE) #Import graded responses
+
+## ----Indicate Location of Required GRADED Columns (for the GRADED Responses File)---
+#Every row is a student
+# USERS: edit the line below to indicate the columns of the roster file that include the 
+# following items IN THIS ORDER:
+#      - Name (1 column; format: first last) 
+#      - Email (1 column; format: myname@myinstitution.edu)
+#      - SectionID (1 column; format: myname@myinstitution.edu)
+#      - All question columns, in order (as many columns as items on the MCT)
+RESPONSE_COLUMN_NUMBERS <- c(1,2,3,16,17,18,19,20,21,22,23,24,25,26,27) #REMEMBER: Name, Email, Items
+allData <- rawGradedResponses[,RESPONSE_COLUMN_NUMBERS]  #Save chosen columns as a new variable that we will work with in the code
+
+## ----DATA COLUMN NAMES---
+# Data from Gradescope (or another source) may have the raw data with undesired, long, or
+# otherwise cumbersome column names. The names below are simple and used throughout the code.
+#
+# The "Name" and "Email" column names are required to be as shown.
+#
+# This code is built around the "Q_" prefix in the label for all MCT items. 
+#   We recommend not changing this convention.
+
+# For the 12-item example:
+RESPONSE_COLUMN_NAMES <- c("Name", "Email","SectionID", "Q_01", "Q_02", "Q_03", "Q_04",
+                  "Q_05","Q_06", "Q_07", "Q_08",
+                  "Q_09", "Q_10", "Q_11", "Q_12")
+
+# For a potential 5-item MCT:
+#RESPONSE_COLUMN_NAMES <- c("Name", "Email","SectionID", "Q_01", "Q_02", "Q_03", "Q_04", "Q_05")
+
+names(allData) <- RESPONSE_COLUMN_NAMES     # assign the names of the columns of the response data
+
+@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DEFINING VARIABLES (END)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% INSTRUCTOR REPORT (START)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\abstract{This is a summary report of student performance on the ME 274 Fundamentals Exam.  \textit{The content and format of this report is a work in progress, so please provide any and all feedback.}}	
+
+\begin{document}
+\maketitle
+
+
+<<Libraries,tidy=TRUE, include=FALSE>>=
+## ----Install packages----
+library(knitr)
+library(xtable)
+library(stats)
+library(tidyr)
+library(ggplot2)
+library(grid)
+library("gridExtra")
+library(RColorBrewer)
+
+@
+
+
+<<merge.roster.GSresponses, include=FALSE>>=
+############################## ##
+## Find Total Score
+############################## ##
+iItems <- grepl("Q_", colnames(allData)) #Find all the columns with Q_ in their names
+allData$NumberCorrect <- rowSums(allData[ , iItems])  #Add the total number correct column
+
+############################## ##
+## Summary Statistics for Total Score
+##  --Overall and by section
+############################## ##
+## ----Prepare the matrix:---
+summaryStats <- matrix(nrow = (length(SEC_NUMS)+1), ncol = 6) #Initial the matrix that will store all the data for Table 1 in the instructor report (summary of total scores by sections)
+colnames (summaryStats) <- c("Minimum", "1st Quartile", "Median", "Mean", "3rd Quartile", "Maximum") #Column names
+row.names(summaryStats) <- c(1:(length(SEC_NUMS)+1)) #Placeholder for row names
+row.names(summaryStats)[1] <- "All Sections"
+for(ii in 1:length(SEC_NUMS)){
+  row.names(summaryStats)[ii+1] <- paste("Section", SEC_NUMS[ii], sep = " ")
+}
+
+## ----Calculate the stats for total scores---
+#Overall:
+summaryStats[1,1:6] <- t(as.matrix(summary(as.numeric(allData[ , "NumberCorrect"]) )))[1:6] #Don't include the NA column because if no NAs, it throws an error.
+
+#By Section:
+for(ii in 1:length(SEC_NUMS)){
+  summaryStats[(ii+1),1:6] <- t(as.matrix(summary(as.numeric(allData[allData$SectionID == ii , "NumberCorrect"]) )))[1:6]
+}
+#summaryStats
+
+## ----Organize the data columns in a specific order:---
+summaryStats <- summaryStats[ , c("Mean", "Median", "Minimum", "Maximum", "1st Quartile", "3rd Quartile")]
+
+############################## ##
+## Summary Statistics for Each Question
+##  --Overall and by section
+############################## ##
+## ----Prepare the matrix:---
+questStats <- matrix(nrow = NUM_ITEMS, ncol = (length(SEC_NUMS)+1)) #Initialize the matrix that will store the data for Table 2 in the instructor report (summary of item-level performance)
+row.names(questStats) <- RESPONSE_COLUMN_NAMES[grepl("Q_", RESPONSE_COLUMN_NAMES)] #Name the rows for each item
+colnames(questStats) <- c(1:(length(SEC_NUMS)+1)) #Placeholder for column names
+# In the table that is included in the report, a multi-column header of "Section" is used;
+# Therefore, no "Section" is needed in these column headers; just numbers
+colnames(questStats)[1] <- "All"
+for(ii in 1:length(SEC_NUMS)){
+  colnames(questStats)[ii+1] <- paste(SEC_NUMS[ii], sep = "")
+}
+
+## ----Calculate the question-level stats---
+#All sections:
+questStats [ , 1] <- colMeans(allData[, iItems], na.rm = TRUE) #Finds the column averages for all columns with graded item responses
+
+#By Section:
+for(ii in 1:length(SEC_NUMS)){
+  questStats [ , (ii+1)] <- colMeans(allData[allData$SectionID == SEC_NUMS[ii],  iItems], na.rm = TRUE) #Finds column means for graded data by section
+}
+#questStats
+
+@
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% INSTRUCTOR SUMMARY REPORT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%This is where the actual content that is shown in the report starts.
+
+\section*{Overall Performance}
+Table \ref{table:summaryStats} lists the descriptive statistics for your students' total scores (the total number of questions correct). 
+<<sum.Table, results='asis', echo=FALSE>>=
+#summaryStats
+
+print(xtable(summaryStats[ , 1:6],
+             caption="Summary Statistics for Overall Number of Questions Correct",
+             label="table:summaryStats", align = c("l","c","c","c","c","c","c")),
+      include.rownames=TRUE,
+      caption.placement="top",
+      booktabs=TRUE
+      )
+@
+\FloatBarrier
+
+\section*{Performance By Question}
+Table \ref{table:questStats} details the proportion of correct responses for each question on the assessment.  
+
+%\newpage
+
+<<quest.Table, results='asis', echo=FALSE>>=
+
+questStatsTopic <- questStats #Make a new table that we will manipulate
+rownames(questStatsTopic) <- ITEM_DESCRIPTIONS
+questStatsTopicOrder <- questStatsTopic[order(questStatsTopic[, 1],decreasing = TRUE), ]
+#questStatsTopicOrder
+
+colAlign <- c("l", "c", rep("c",length(SEC_NUMS)))
+
+print(xtable(questStatsTopicOrder,
+             caption="Proportion of Students That Answered Question Correctly",
+             label="table:questStats", align = colAlign),
+      include.rownames=TRUE,
+      caption.placement="top",
+      booktabs=TRUE,
+      hline.after=NULL, #We don't need hline; we use booktabs
+      add.to.row = list(pos = list(-1,
+                                   0,
+                                   nrow(questStatsTopicOrder)
+                                   ),
+                        command = c(paste("\\toprule \n",
+                                          paste0("& \\multicolumn{", length(SEC_NUMS)+1, "}{c}{Section}\\\\\n"),
+                                          paste0("\\cline{2-",length(SEC_NUMS)+2,"} \n")),
+                                    "\\midrule \n",
+                                    "\\bottomrule \n"
+                                    )
+                                    
+                        )
+                        
+      )
+
+
+
+@
+
+\newpage
+
+\end{document}

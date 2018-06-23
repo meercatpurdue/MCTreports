@@ -1,0 +1,13 @@
+SID,Freeform_ID,ACADEMIC_PERIOD,COURSE_IDENTIFICATION,COURSE_SECTION_NUMBER,ID,FIRST_NAME,MIDDLE_NAME,LAST_NAME,NAME,EMAIL,PRIMARY_INSTRUCTOR
+1,1.80E+11,201820,ME27400,1,11111111,Domenic,,Noyola,"Noyola, Domenic",noyolad@lmrstate.edu,"Riter, Grace"
+2,1.80E+11,201820,ME27400,1,11111112,Dwight,,Dalton,"Dalton, Dwight",daltond@lmrstate.edu,"Riter, Grace"
+3,1.80E+11,201820,ME27400,1,11111113,Marge,,Kita,"Kita, Marge",kitam@lmrstate.edu,"Riter, Grace"
+106,1.80E+11,201820,ME27400,3,11111114,Jannet,,Motley,"Motley, Jannet",motleyj@lmrstate.edu,"Leonardi, Wilmer"
+107,1.80E+11,201820,ME27400,3,11111115,Eun,,Sherrell,"Sherrell, Eun",sherrelle@lmrstate.edu,"Leonardi, Wilmer"
+108,1.80E+11,201820,ME27400,3,11111116,Eduardo,,Roach,"Roach, Eduardo",roache@lmrstate.edu,"Leonardi, Wilmer"
+198,1.80E+11,201820,ME27400,4,11111117,Rozella,,Pontious,"Pontious, Rozella",pontiousr@lmrstate.edu,"Ansari, Mohammed"
+199,1.80E+11,201820,ME27400,4,11111118,Anja,,Tingey,"Tingey, Anja",tingeya@lmrstate.edu,"Ansari, Mohammed"
+200,1.80E+11,201820,ME27400,4,11111119,Ivory,,Harman,"Harman, Ivory",harmani@lmrstate.edu,"Ansari, Mohammed"
+276,1.80E+11,201820,ME27400,5,11111120,Sheree,,Bluford,"Bluford, Sheree",blufords@lmrstate.edu,"Larabee, Andera"
+277,1.80E+11,201820,ME27400,5,11111121,Jeneva,,Dyal,"Dyal, Jeneva",dyalj@lmrstate.edu,"Larabee, Andera"
+278,1.80E+11,201820,ME27400,5,11111122,Emelda,,Leyendecker,"Leyendecker, Emelda",leyendecke@lmrstate.edu,"Larabee, Andera"

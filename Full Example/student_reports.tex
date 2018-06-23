@@ -1,0 +1,406 @@
+\documentclass[11pt,letterpaper]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[letterpaper, margin = 1.0in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage [english]{babel}
+\usepackage{microtype}
+\usepackage [autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
+\usepackage[
+	bookmarksopen,
+	bookmarksdepth=2,
+	%breaklinks=true
+	colorlinks=true,
+	urlcolor=blue]{hyperref}
+\usepackage[parfill]{parskip}
+\pagestyle{empty}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PURPOSE/USE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Loop through each student and create a report based on their item-level results.
+%% When the code is compiled, the output is one pdf that contains the feedback reports for every students who completed the assessment.
+%% The output pdf will be saved in your working directory, so
+%% CHANGE YOUR WORKING DIRECTORY to be the folder which contains your data and this .Rnw file
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DEFINING VARIABLES (START)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% In this section, define the variables that change from semester to semester or
+%% from user to user 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DEFINING VARIABLES (END)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% LOAD DATA
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% GENERATE THE STUDENT REPORTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+%% The code below automatically creates a feedback report for each student in the completeScores data frame.
+%% It breaks the report into three sections: 1)Intro, 2) Apparent Strengths, and 3) Apparent Weaknesses.
+%%The items that are included in the strengths or weaknesses sections depends on which items of the assessment they got correct (1) or incorrect (0).
+
+\section*{Dwight Dalton}
+\subsection*{ME 274 Fundamentals Exam Results}
+\underline{What is the purpose of the Fundamental Exam?}  The topics on the Fundamental Exam should be familiar to you from previous courses.  In ME 274 we will review and build on these topics (among others). We hope that the Fundamental Exam serves as a tool to help identify fundamental topics in which you may need extra review to ensure your success in ME 274.\
+
+\underline{How can I use my results?}  This report summarizes your performance on each item/concept of the Fundamentals Exam.  For the items you missed, we suggest you review the corresponding sections in your lecturebook, visit the tutorial room, or see your instructor.
+
+\subsection*{Apparent Strengths: Review Optional}
+For the topics listed below, you correctly answered the corresponding question on the Fundamentals Exam.  Nonetheless, if you do not feel comfortable with any of them, we suggest you review them using the resources linked below or other class resources.
+
+\begin{itemize}\item Q3. Cross Product: Conceptual (see this \href{https://www.youtube.com/watch?v=h0NJK4mEIJU&t=8s}{visual explanation of dot and cross products})
+\item Q4. Free Body Diagrams (see the course Lecturebook, Section 0.B; or review \href{https://www.purdue.edu/statics/}{material from the ME 270 blog})
+\item Q6. Vector Projection: Unit Vector (see Section 0.A)
+\item Q7. Cross Product: Calculation (see the course Lecturebook, Section 0.A; or \href{https://www.youtube.com/watch?v=DmPxjmymM7k}{this Youtube video})
+\item Q10. Vector Projection: Coord. System (see Section 0.A)
+\item Q11. Vector Projection: Rotated Coord. System (see Section 0.A)
+\item Q12. Moments (see Section 0.A)
+\end{itemize}\subsection*{Apparent Weaknesses: Review of These Topics Suggested}
+For the topics listed below, you incorrectly answered the corresponding question on the Fundamentals Exam.  We suggest you review these topics because they are fundamental to your success in this course.  The relevent sections in your lecturebook, as well as related videos, are listed with the topic.
+
+\begin{itemize}\item Q1. Speed Time History (see \href{https://www.youtube.com/watch?v=lZPtFDXYQRU}{this video about motion and time})
+\item Q2. Kinetic Energy Time History (review \href{https://www.purdue.edu/freeform/dynamics/wp-content/uploads/sites/4/2018/01/Syllabus-Spring-2018.pdf}{the course syllabus})
+\item Q5. Chain Rule (see Section 0.C)
+\item Q8. Friction (see ME 270 lecturebook)
+\item Q9. FBD and Multibody Systems (see Sections 0.B, 4.A)
+\end{itemize}
+
+\pagebreak
+\section*{Domenic Noyola}
+\subsection*{ME 274 Fundamentals Exam Results}
+\underline{What is the purpose of the Fundamental Exam?}  The topics on the Fundamental Exam should be familiar to you from previous courses.  In ME 274 we will review and build on these topics (among others). We hope that the Fundamental Exam serves as a tool to help identify fundamental topics in which you may need extra review to ensure your success in ME 274.\
+
+\underline{How can I use my results?}  This report summarizes your performance on each item/concept of the Fundamentals Exam.  For the items you missed, we suggest you review the corresponding sections in your lecturebook, visit the tutorial room, or see your instructor.
+
+\subsection*{Apparent Strengths: Review Optional}
+For the topics listed below, you correctly answered the corresponding question on the Fundamentals Exam.  Nonetheless, if you do not feel comfortable with any of them, we suggest you review them using the resources linked below or other class resources.
+
+\begin{itemize}\item Q1. Speed Time History (see \href{https://www.youtube.com/watch?v=lZPtFDXYQRU}{this video about motion and time})
+\item Q3. Cross Product: Conceptual (see this \href{https://www.youtube.com/watch?v=h0NJK4mEIJU&t=8s}{visual explanation of dot and cross products})
+\item Q5. Chain Rule (see Section 0.C)
+\item Q6. Vector Projection: Unit Vector (see Section 0.A)
+\item Q7. Cross Product: Calculation (see the course Lecturebook, Section 0.A; or \href{https://www.youtube.com/watch?v=DmPxjmymM7k}{this Youtube video})
+\item Q8. Friction (see ME 270 lecturebook)
+\item Q10. Vector Projection: Coord. System (see Section 0.A)
+\item Q11. Vector Projection: Rotated Coord. System (see Section 0.A)
+\item Q12. Moments (see Section 0.A)
+\end{itemize}\subsection*{Apparent Weaknesses: Review of These Topics Suggested}
+For the topics listed below, you incorrectly answered the corresponding question on the Fundamentals Exam.  We suggest you review these topics because they are fundamental to your success in this course.  The relevent sections in your lecturebook, as well as related videos, are listed with the topic.
+
+\begin{itemize}\item Q2. Kinetic Energy Time History (review \href{https://www.purdue.edu/freeform/dynamics/wp-content/uploads/sites/4/2018/01/Syllabus-Spring-2018.pdf}{the course syllabus})
+\item Q4. Free Body Diagrams (see the course Lecturebook, Section 0.B; or review \href{https://www.purdue.edu/statics/}{material from the ME 270 blog})
+\item Q9. FBD and Multibody Systems (see Sections 0.B, 4.A)
+\end{itemize}
+
+\pagebreak
+\section*{Jannet Motley}
+\subsection*{ME 274 Fundamentals Exam Results}
+\underline{What is the purpose of the Fundamental Exam?}  The topics on the Fundamental Exam should be familiar to you from previous courses.  In ME 274 we will review and build on these topics (among others). We hope that the Fundamental Exam serves as a tool to help identify fundamental topics in which you may need extra review to ensure your success in ME 274.\
+
+\underline{How can I use my results?}  This report summarizes your performance on each item/concept of the Fundamentals Exam.  For the items you missed, we suggest you review the corresponding sections in your lecturebook, visit the tutorial room, or see your instructor.
+
+\subsection*{Apparent Strengths: Review Optional}
+For the topics listed below, you correctly answered the corresponding question on the Fundamentals Exam.  Nonetheless, if you do not feel comfortable with any of them, we suggest you review them using the resources linked below or other class resources.
+
+\begin{itemize}\item Q1. Speed Time History (see \href{https://www.youtube.com/watch?v=lZPtFDXYQRU}{this video about motion and time})
+\item Q2. Kinetic Energy Time History (review \href{https://www.purdue.edu/freeform/dynamics/wp-content/uploads/sites/4/2018/01/Syllabus-Spring-2018.pdf}{the course syllabus})
+\item Q6. Vector Projection: Unit Vector (see Section 0.A)
+\item Q7. Cross Product: Calculation (see the course Lecturebook, Section 0.A; or \href{https://www.youtube.com/watch?v=DmPxjmymM7k}{this Youtube video})
+\item Q8. Friction (see ME 270 lecturebook)
+\item Q9. FBD and Multibody Systems (see Sections 0.B, 4.A)
+\item Q11. Vector Projection: Rotated Coord. System (see Section 0.A)
+\item Q12. Moments (see Section 0.A)
+\end{itemize}\subsection*{Apparent Weaknesses: Review of These Topics Suggested}
+For the topics listed below, you incorrectly answered the corresponding question on the Fundamentals Exam.  We suggest you review these topics because they are fundamental to your success in this course.  The relevent sections in your lecturebook, as well as related videos, are listed with the topic.
+
+\begin{itemize}\item Q3. Cross Product: Conceptual (see this \href{https://www.youtube.com/watch?v=h0NJK4mEIJU&t=8s}{visual explanation of dot and cross products})
+\item Q4. Free Body Diagrams (see the course Lecturebook, Section 0.B; or review \href{https://www.purdue.edu/statics/}{material from the ME 270 blog})
+\item Q5. Chain Rule (see Section 0.C)
+\item Q10. Vector Projection: Coord. System (see Section 0.A)
+\end{itemize}
+
+\pagebreak
+\section*{Eduardo Roach}
+\subsection*{ME 274 Fundamentals Exam Results}
+\underline{What is the purpose of the Fundamental Exam?}  The topics on the Fundamental Exam should be familiar to you from previous courses.  In ME 274 we will review and build on these topics (among others). We hope that the Fundamental Exam serves as a tool to help identify fundamental topics in which you may need extra review to ensure your success in ME 274.\
+
+\underline{How can I use my results?}  This report summarizes your performance on each item/concept of the Fundamentals Exam.  For the items you missed, we suggest you review the corresponding sections in your lecturebook, visit the tutorial room, or see your instructor.
+
+\subsection*{Apparent Strengths: Review Optional}
+For the topics listed below, you correctly answered the corresponding question on the Fundamentals Exam.  Nonetheless, if you do not feel comfortable with any of them, we suggest you review them using the resources linked below or other class resources.
+
+\begin{itemize}\item Q1. Speed Time History (see \href{https://www.youtube.com/watch?v=lZPtFDXYQRU}{this video about motion and time})
+\item Q2. Kinetic Energy Time History (review \href{https://www.purdue.edu/freeform/dynamics/wp-content/uploads/sites/4/2018/01/Syllabus-Spring-2018.pdf}{the course syllabus})
+\item Q3. Cross Product: Conceptual (see this \href{https://www.youtube.com/watch?v=h0NJK4mEIJU&t=8s}{visual explanation of dot and cross products})
+\item Q4. Free Body Diagrams (see the course Lecturebook, Section 0.B; or review \href{https://www.purdue.edu/statics/}{material from the ME 270 blog})
+\item Q6. Vector Projection: Unit Vector (see Section 0.A)
+\item Q7. Cross Product: Calculation (see the course Lecturebook, Section 0.A; or \href{https://www.youtube.com/watch?v=DmPxjmymM7k}{this Youtube video})
+\item Q8. Friction (see ME 270 lecturebook)
+\item Q9. FBD and Multibody Systems (see Sections 0.B, 4.A)
+\item Q10. Vector Projection: Coord. System (see Section 0.A)
+\item Q11. Vector Projection: Rotated Coord. System (see Section 0.A)
+\end{itemize}\subsection*{Apparent Weaknesses: Review of These Topics Suggested}
+For the topics listed below, you incorrectly answered the corresponding question on the Fundamentals Exam.  We suggest you review these topics because they are fundamental to your success in this course.  The relevent sections in your lecturebook, as well as related videos, are listed with the topic.
+
+\begin{itemize}\item Q5. Chain Rule (see Section 0.C)
+\item Q12. Moments (see Section 0.A)
+\end{itemize}
+
+\pagebreak
+\section*{Eun Sherrell}
+\subsection*{ME 274 Fundamentals Exam Results}
+\underline{What is the purpose of the Fundamental Exam?}  The topics on the Fundamental Exam should be familiar to you from previous courses.  In ME 274 we will review and build on these topics (among others). We hope that the Fundamental Exam serves as a tool to help identify fundamental topics in which you may need extra review to ensure your success in ME 274.\
+
+\underline{How can I use my results?}  This report summarizes your performance on each item/concept of the Fundamentals Exam.  For the items you missed, we suggest you review the corresponding sections in your lecturebook, visit the tutorial room, or see your instructor.
+
+\subsection*{Apparent Strengths: Review Optional}
+For the topics listed below, you correctly answered the corresponding question on the Fundamentals Exam.  Nonetheless, if you do not feel comfortable with any of them, we suggest you review them using the resources linked below or other class resources.
+
+\begin{itemize}\item Q1. Speed Time History (see \href{https://www.youtube.com/watch?v=lZPtFDXYQRU}{this video about motion and time})
+\item Q2. Kinetic Energy Time History (review \href{https://www.purdue.edu/freeform/dynamics/wp-content/uploads/sites/4/2018/01/Syllabus-Spring-2018.pdf}{the course syllabus})
+\item Q3. Cross Product: Conceptual (see this \href{https://www.youtube.com/watch?v=h0NJK4mEIJU&t=8s}{visual explanation of dot and cross products})
+\item Q4. Free Body Diagrams (see the course Lecturebook, Section 0.B; or review \href{https://www.purdue.edu/statics/}{material from the ME 270 blog})
+\item Q10. Vector Projection: Coord. System (see Section 0.A)
+\item Q12. Moments (see Section 0.A)
+\end{itemize}\subsection*{Apparent Weaknesses: Review of These Topics Suggested}
+For the topics listed below, you incorrectly answered the corresponding question on the Fundamentals Exam.  We suggest you review these topics because they are fundamental to your success in this course.  The relevent sections in your lecturebook, as well as related videos, are listed with the topic.
+
+\begin{itemize}\item Q5. Chain Rule (see Section 0.C)
+\item Q6. Vector Projection: Unit Vector (see Section 0.A)
+\item Q7. Cross Product: Calculation (see the course Lecturebook, Section 0.A; or \href{https://www.youtube.com/watch?v=DmPxjmymM7k}{this Youtube video})
+\item Q8. Friction (see ME 270 lecturebook)
+\item Q9. FBD and Multibody Systems (see Sections 0.B, 4.A)
+\item Q11. Vector Projection: Rotated Coord. System (see Section 0.A)
+\end{itemize}
+
+\pagebreak
+\section*{Ivory Harman}
+\subsection*{ME 274 Fundamentals Exam Results}
+\underline{What is the purpose of the Fundamental Exam?}  The topics on the Fundamental Exam should be familiar to you from previous courses.  In ME 274 we will review and build on these topics (among others). We hope that the Fundamental Exam serves as a tool to help identify fundamental topics in which you may need extra review to ensure your success in ME 274.\
+
+\underline{How can I use my results?}  This report summarizes your performance on each item/concept of the Fundamentals Exam.  For the items you missed, we suggest you review the corresponding sections in your lecturebook, visit the tutorial room, or see your instructor.
+
+\subsection*{Apparent Strengths: Review Optional}
+For the topics listed below, you correctly answered the corresponding question on the Fundamentals Exam.  Nonetheless, if you do not feel comfortable with any of them, we suggest you review them using the resources linked below or other class resources.
+
+\begin{itemize}\item Q1. Speed Time History (see \href{https://www.youtube.com/watch?v=lZPtFDXYQRU}{this video about motion and time})
+\item Q3. Cross Product: Conceptual (see this \href{https://www.youtube.com/watch?v=h0NJK4mEIJU&t=8s}{visual explanation of dot and cross products})
+\item Q4. Free Body Diagrams (see the course Lecturebook, Section 0.B; or review \href{https://www.purdue.edu/statics/}{material from the ME 270 blog})
+\item Q7. Cross Product: Calculation (see the course Lecturebook, Section 0.A; or \href{https://www.youtube.com/watch?v=DmPxjmymM7k}{this Youtube video})
+\item Q8. Friction (see ME 270 lecturebook)
+\item Q9. FBD and Multibody Systems (see Sections 0.B, 4.A)
+\item Q10. Vector Projection: Coord. System (see Section 0.A)
+\item Q12. Moments (see Section 0.A)
+\end{itemize}\subsection*{Apparent Weaknesses: Review of These Topics Suggested}
+For the topics listed below, you incorrectly answered the corresponding question on the Fundamentals Exam.  We suggest you review these topics because they are fundamental to your success in this course.  The relevent sections in your lecturebook, as well as related videos, are listed with the topic.
+
+\begin{itemize}\item Q2. Kinetic Energy Time History (review \href{https://www.purdue.edu/freeform/dynamics/wp-content/uploads/sites/4/2018/01/Syllabus-Spring-2018.pdf}{the course syllabus})
+\item Q5. Chain Rule (see Section 0.C)
+\item Q6. Vector Projection: Unit Vector (see Section 0.A)
+\item Q11. Vector Projection: Rotated Coord. System (see Section 0.A)
+\end{itemize}
+
+\pagebreak
+\section*{Rozella Pontious}
+\subsection*{ME 274 Fundamentals Exam Results}
+\underline{What is the purpose of the Fundamental Exam?}  The topics on the Fundamental Exam should be familiar to you from previous courses.  In ME 274 we will review and build on these topics (among others). We hope that the Fundamental Exam serves as a tool to help identify fundamental topics in which you may need extra review to ensure your success in ME 274.\
+
+\underline{How can I use my results?}  This report summarizes your performance on each item/concept of the Fundamentals Exam.  For the items you missed, we suggest you review the corresponding sections in your lecturebook, visit the tutorial room, or see your instructor.
+
+\subsection*{Apparent Strengths: Review Optional}
+For the topics listed below, you correctly answered the corresponding question on the Fundamentals Exam.  Nonetheless, if you do not feel comfortable with any of them, we suggest you review them using the resources linked below or other class resources.
+
+\begin{itemize}\item Q1. Speed Time History (see \href{https://www.youtube.com/watch?v=lZPtFDXYQRU}{this video about motion and time})
+\item Q2. Kinetic Energy Time History (review \href{https://www.purdue.edu/freeform/dynamics/wp-content/uploads/sites/4/2018/01/Syllabus-Spring-2018.pdf}{the course syllabus})
+\item Q3. Cross Product: Conceptual (see this \href{https://www.youtube.com/watch?v=h0NJK4mEIJU&t=8s}{visual explanation of dot and cross products})
+\item Q4. Free Body Diagrams (see the course Lecturebook, Section 0.B; or review \href{https://www.purdue.edu/statics/}{material from the ME 270 blog})
+\item Q8. Friction (see ME 270 lecturebook)
+\item Q10. Vector Projection: Coord. System (see Section 0.A)
+\item Q11. Vector Projection: Rotated Coord. System (see Section 0.A)
+\end{itemize}\subsection*{Apparent Weaknesses: Review of These Topics Suggested}
+For the topics listed below, you incorrectly answered the corresponding question on the Fundamentals Exam.  We suggest you review these topics because they are fundamental to your success in this course.  The relevent sections in your lecturebook, as well as related videos, are listed with the topic.
+
+\begin{itemize}\item Q5. Chain Rule (see Section 0.C)
+\item Q6. Vector Projection: Unit Vector (see Section 0.A)
+\item Q7. Cross Product: Calculation (see the course Lecturebook, Section 0.A; or \href{https://www.youtube.com/watch?v=DmPxjmymM7k}{this Youtube video})
+\item Q9. FBD and Multibody Systems (see Sections 0.B, 4.A)
+\item Q12. Moments (see Section 0.A)
+\end{itemize}
+
+\pagebreak
+\section*{Anja Tingey}
+\subsection*{ME 274 Fundamentals Exam Results}
+\underline{What is the purpose of the Fundamental Exam?}  The topics on the Fundamental Exam should be familiar to you from previous courses.  In ME 274 we will review and build on these topics (among others). We hope that the Fundamental Exam serves as a tool to help identify fundamental topics in which you may need extra review to ensure your success in ME 274.\
+
+\underline{How can I use my results?}  This report summarizes your performance on each item/concept of the Fundamentals Exam.  For the items you missed, we suggest you review the corresponding sections in your lecturebook, visit the tutorial room, or see your instructor.
+
+\subsection*{Apparent Strengths: Review Optional}
+For the topics listed below, you correctly answered the corresponding question on the Fundamentals Exam.  Nonetheless, if you do not feel comfortable with any of them, we suggest you review them using the resources linked below or other class resources.
+
+\begin{itemize}\item Q1. Speed Time History (see \href{https://www.youtube.com/watch?v=lZPtFDXYQRU}{this video about motion and time})
+\item Q2. Kinetic Energy Time History (review \href{https://www.purdue.edu/freeform/dynamics/wp-content/uploads/sites/4/2018/01/Syllabus-Spring-2018.pdf}{the course syllabus})
+\item Q3. Cross Product: Conceptual (see this \href{https://www.youtube.com/watch?v=h0NJK4mEIJU&t=8s}{visual explanation of dot and cross products})
+\item Q4. Free Body Diagrams (see the course Lecturebook, Section 0.B; or review \href{https://www.purdue.edu/statics/}{material from the ME 270 blog})
+\item Q6. Vector Projection: Unit Vector (see Section 0.A)
+\item Q7. Cross Product: Calculation (see the course Lecturebook, Section 0.A; or \href{https://www.youtube.com/watch?v=DmPxjmymM7k}{this Youtube video})
+\item Q8. Friction (see ME 270 lecturebook)
+\item Q9. FBD and Multibody Systems (see Sections 0.B, 4.A)
+\item Q10. Vector Projection: Coord. System (see Section 0.A)
+\item Q11. Vector Projection: Rotated Coord. System (see Section 0.A)
+\end{itemize}\subsection*{Apparent Weaknesses: Review of These Topics Suggested}
+For the topics listed below, you incorrectly answered the corresponding question on the Fundamentals Exam.  We suggest you review these topics because they are fundamental to your success in this course.  The relevent sections in your lecturebook, as well as related videos, are listed with the topic.
+
+\begin{itemize}\item Q5. Chain Rule (see Section 0.C)
+\item Q12. Moments (see Section 0.A)
+\end{itemize}
+
+\pagebreak
+\section*{Sheree Bluford}
+\subsection*{ME 274 Fundamentals Exam Results}
+\underline{What is the purpose of the Fundamental Exam?}  The topics on the Fundamental Exam should be familiar to you from previous courses.  In ME 274 we will review and build on these topics (among others). We hope that the Fundamental Exam serves as a tool to help identify fundamental topics in which you may need extra review to ensure your success in ME 274.\
+
+\underline{How can I use my results?}  This report summarizes your performance on each item/concept of the Fundamentals Exam.  For the items you missed, we suggest you review the corresponding sections in your lecturebook, visit the tutorial room, or see your instructor.
+
+\subsection*{Apparent Strengths: Review Optional}
+For the topics listed below, you correctly answered the corresponding question on the Fundamentals Exam.  Nonetheless, if you do not feel comfortable with any of them, we suggest you review them using the resources linked below or other class resources.
+
+\begin{itemize}\item Q1. Speed Time History (see \href{https://www.youtube.com/watch?v=lZPtFDXYQRU}{this video about motion and time})
+\item Q3. Cross Product: Conceptual (see this \href{https://www.youtube.com/watch?v=h0NJK4mEIJU&t=8s}{visual explanation of dot and cross products})
+\item Q4. Free Body Diagrams (see the course Lecturebook, Section 0.B; or review \href{https://www.purdue.edu/statics/}{material from the ME 270 blog})
+\item Q6. Vector Projection: Unit Vector (see Section 0.A)
+\item Q7. Cross Product: Calculation (see the course Lecturebook, Section 0.A; or \href{https://www.youtube.com/watch?v=DmPxjmymM7k}{this Youtube video})
+\item Q10. Vector Projection: Coord. System (see Section 0.A)
+\item Q11. Vector Projection: Rotated Coord. System (see Section 0.A)
+\end{itemize}\subsection*{Apparent Weaknesses: Review of These Topics Suggested}
+For the topics listed below, you incorrectly answered the corresponding question on the Fundamentals Exam.  We suggest you review these topics because they are fundamental to your success in this course.  The relevent sections in your lecturebook, as well as related videos, are listed with the topic.
+
+\begin{itemize}\item Q2. Kinetic Energy Time History (review \href{https://www.purdue.edu/freeform/dynamics/wp-content/uploads/sites/4/2018/01/Syllabus-Spring-2018.pdf}{the course syllabus})
+\item Q5. Chain Rule (see Section 0.C)
+\item Q8. Friction (see ME 270 lecturebook)
+\item Q9. FBD and Multibody Systems (see Sections 0.B, 4.A)
+\item Q12. Moments (see Section 0.A)
+\end{itemize}
+
+\pagebreak
+\section*{Jeneva Dyal}
+\subsection*{ME 274 Fundamentals Exam Results}
+\underline{What is the purpose of the Fundamental Exam?}  The topics on the Fundamental Exam should be familiar to you from previous courses.  In ME 274 we will review and build on these topics (among others). We hope that the Fundamental Exam serves as a tool to help identify fundamental topics in which you may need extra review to ensure your success in ME 274.\
+
+\underline{How can I use my results?}  This report summarizes your performance on each item/concept of the Fundamentals Exam.  For the items you missed, we suggest you review the corresponding sections in your lecturebook, visit the tutorial room, or see your instructor.
+
+\subsection*{Apparent Strengths: Review Optional}
+For the topics listed below, you correctly answered the corresponding question on the Fundamentals Exam.  Nonetheless, if you do not feel comfortable with any of them, we suggest you review them using the resources linked below or other class resources.
+
+\begin{itemize}\item Q1. Speed Time History (see \href{https://www.youtube.com/watch?v=lZPtFDXYQRU}{this video about motion and time})
+\item Q2. Kinetic Energy Time History (review \href{https://www.purdue.edu/freeform/dynamics/wp-content/uploads/sites/4/2018/01/Syllabus-Spring-2018.pdf}{the course syllabus})
+\item Q3. Cross Product: Conceptual (see this \href{https://www.youtube.com/watch?v=h0NJK4mEIJU&t=8s}{visual explanation of dot and cross products})
+\item Q4. Free Body Diagrams (see the course Lecturebook, Section 0.B; or review \href{https://www.purdue.edu/statics/}{material from the ME 270 blog})
+\item Q6. Vector Projection: Unit Vector (see Section 0.A)
+\item Q7. Cross Product: Calculation (see the course Lecturebook, Section 0.A; or \href{https://www.youtube.com/watch?v=DmPxjmymM7k}{this Youtube video})
+\item Q8. Friction (see ME 270 lecturebook)
+\item Q9. FBD and Multibody Systems (see Sections 0.B, 4.A)
+\item Q10. Vector Projection: Coord. System (see Section 0.A)
+\item Q11. Vector Projection: Rotated Coord. System (see Section 0.A)
+\item Q12. Moments (see Section 0.A)
+\end{itemize}\subsection*{Apparent Weaknesses: Review of These Topics Suggested}
+For the topics listed below, you incorrectly answered the corresponding question on the Fundamentals Exam.  We suggest you review these topics because they are fundamental to your success in this course.  The relevent sections in your lecturebook, as well as related videos, are listed with the topic.
+
+\begin{itemize}\item Q5. Chain Rule (see Section 0.C)
+\end{itemize}
+
+\pagebreak
+\section*{Emelda Leyendecker}
+\subsection*{ME 274 Fundamentals Exam Results}
+\underline{What is the purpose of the Fundamental Exam?}  The topics on the Fundamental Exam should be familiar to you from previous courses.  In ME 274 we will review and build on these topics (among others). We hope that the Fundamental Exam serves as a tool to help identify fundamental topics in which you may need extra review to ensure your success in ME 274.\
+
+\underline{How can I use my results?}  This report summarizes your performance on each item/concept of the Fundamentals Exam.  For the items you missed, we suggest you review the corresponding sections in your lecturebook, visit the tutorial room, or see your instructor.
+
+\subsection*{Apparent Strengths: Review Optional}
+For the topics listed below, you correctly answered the corresponding question on the Fundamentals Exam.  Nonetheless, if you do not feel comfortable with any of them, we suggest you review them using the resources linked below or other class resources.
+
+\begin{itemize}\item Q3. Cross Product: Conceptual (see this \href{https://www.youtube.com/watch?v=h0NJK4mEIJU&t=8s}{visual explanation of dot and cross products})
+\item Q4. Free Body Diagrams (see the course Lecturebook, Section 0.B; or review \href{https://www.purdue.edu/statics/}{material from the ME 270 blog})
+\item Q5. Chain Rule (see Section 0.C)
+\item Q7. Cross Product: Calculation (see the course Lecturebook, Section 0.A; or \href{https://www.youtube.com/watch?v=DmPxjmymM7k}{this Youtube video})
+\item Q8. Friction (see ME 270 lecturebook)
+\item Q9. FBD and Multibody Systems (see Sections 0.B, 4.A)
+\item Q10. Vector Projection: Coord. System (see Section 0.A)
+\item Q11. Vector Projection: Rotated Coord. System (see Section 0.A)
+\item Q12. Moments (see Section 0.A)
+\end{itemize}\subsection*{Apparent Weaknesses: Review of These Topics Suggested}
+For the topics listed below, you incorrectly answered the corresponding question on the Fundamentals Exam.  We suggest you review these topics because they are fundamental to your success in this course.  The relevent sections in your lecturebook, as well as related videos, are listed with the topic.
+
+\begin{itemize}\item Q1. Speed Time History (see \href{https://www.youtube.com/watch?v=lZPtFDXYQRU}{this video about motion and time})
+\item Q2. Kinetic Energy Time History (review \href{https://www.purdue.edu/freeform/dynamics/wp-content/uploads/sites/4/2018/01/Syllabus-Spring-2018.pdf}{the course syllabus})
+\item Q6. Vector Projection: Unit Vector (see Section 0.A)
+\end{itemize}
+
+\pagebreak
+
+\end{document}

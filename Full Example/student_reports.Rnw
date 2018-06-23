@@ -1,0 +1,173 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[letterpaper, margin = 1.0in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage [english]{babel}
+\usepackage{microtype}
+\usepackage [autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
+\usepackage[
+	bookmarksopen,
+	bookmarksdepth=2,
+	%breaklinks=true
+	colorlinks=true,
+	urlcolor=blue]{hyperref}
+\usepackage[parfill]{parskip}
+\pagestyle{empty}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PURPOSE/USE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Loop through each student and create a report based on their item-level results.
+%% When the code is compiled, the output is one pdf that contains the feedback reports for every students who completed the assessment.
+%% The output pdf will be saved in your working directory, so
+%% CHANGE YOUR WORKING DIRECTORY to be the folder which contains your data and this .Rnw file
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DEFINING VARIABLES (START)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% In this section, define the variables that change from semester to semester or
+%% from user to user 
+
+<<DEFINE.VARIABLES, include=FALSE>>=
+
+## ALL FILES (including this one and the students' graded response file) should be placed in the SAME DIRECTORY.  
+
+## ----SET WORKING DIRECTORY---
+## SET THE WORKING DIRECTORY to the folder with all the source and data files
+## Do this by the RStudio menu options (under 'Session') or the code below
+# setwd("C:/MY/WORKING/DIRECTORY")
+
+
+## ----FILE NAME FOR GRADED, QUESTION-LEVEL RESULTS---
+# This file name is for the QUESTION LEVEL results
+# This file should have been created from the Instructor_Report .Rnw file
+# It needs to include columns for each student's full name (if seperate columns for LAST_NAME and FIRST_NAME, see the modification in the loop below), and the graded responses to each item on the assessment.
+# The column names for each item must include "Q_" for the code below to be able to find the columns with item information.
+# If you would like to change the prefix, be sure to replace "Q_" throughout the code.
+# The responses should be graded as 0 = incorrect, 1 = correct
+GRADED_RESULTS_CSV <- "FE_Results_QuestionLevel.csv"
+
+## ----TITLE OF STUDENT REPORT---
+#  Will appear at the top of every student report
+REPORT_TITLE <- "ME 274 Fundamentals Exam Results"
+
+## ----CLASS NAME---
+# How do you want to refer to the class in this report? Examples are: (i) by course name (i.e. "dynamics"), or (ii) by course number (i.e., "ME 201")
+CLASS_NAME <- "ME 274"
+
+## ----TOPICS AND ACTIONABLE FEEDBACK ---
+# Each entry in this variable corresponds to an item on the assessment
+# Each entry needs a short description of what concept the associated item is testing
+# Each entry should also include the actions that students can take to learn about the concept
+#Sublist with document, video, simulations
+TOPIC_AND_ACTION_FEEDBACK <- c("Q1. Speed Time History (see \\href{https://www.youtube.com/watch?v=lZPtFDXYQRU}{this video about motion and time})", 
+            "Q2. Kinetic Energy Time History (review \\href{https://www.purdue.edu/freeform/dynamics/wp-content/uploads/sites/4/2018/01/Syllabus-Spring-2018.pdf}{the course syllabus})",
+            "Q3. Cross Product: Conceptual (see this \\href{https://www.youtube.com/watch?v=h0NJK4mEIJU&t=8s}{visual explanation of dot and cross products})",
+            "Q4. Free Body Diagrams (see the course Lecturebook, Section 0.B; or review \\href{https://www.purdue.edu/statics/}{material from the ME 270 blog})",
+            "Q5. Chain Rule (see Section 0.C)",
+            "Q6. Vector Projection: Unit Vector (see Section 0.A)",
+            "Q7. Cross Product: Calculation (see the course Lecturebook, Section 0.A; or \\href{https://www.youtube.com/watch?v=DmPxjmymM7k}{this Youtube video})",
+            "Q8. Friction (see ME 270 lecturebook)",
+            "Q9. FBD and Multibody Systems (see Sections 0.B, 4.A)",
+            "Q10. Vector Projection: Coord. System (see Section 0.A)",
+            "Q11. Vector Projection: Rotated Coord. System (see Section 0.A)",
+            "Q12. Moments (see Section 0.A)")
+
+
+## ----STUDENT REPORT INTRODUCTION ---
+#This is what will be included at the top of each student feedback report to give the student an introduction to assessment and how they can use the feedback of the report for learning.
+REPORT_INTRO <- paste0("\\underline{What is the purpose of the Fundamental Exam?}  The topics on the Fundamental Exam should be familiar to you from previous courses.  In ",  CLASS_NAME, " we will review and build on these topics (among others). We hope that the Fundamental Exam serves as a tool to help identify fundamental topics in which you may need extra review to ensure your success in ", CLASS_NAME, ".\\
+
+\\underline{How can I use my results?}  This report summarizes your performance on each item/concept of the Fundamentals Exam.  For the items you missed, we suggest you review the corresponding sections in your lecturebook, visit the tutorial room, or see your instructor.\n")
+
+##----INTRO FOR INCORRECT ITEMS---
+# This content introduces the list of items (topics) that the students answered incorrectly
+INTRO_INCORRECT <- "For the topics listed below, you incorrectly answered the corresponding question on the Fundamentals Exam.  We suggest you review these topics because they are fundamental to your success in this course.  The relevent sections in your lecturebook, as well as related videos, are listed with the topic.\n"
+
+##----INTRO FOR CORRECT ITEMS---
+# This content introduces the list of items (topics) that the students answered correctly
+INTRO_CORRECT <- "For the topics listed below, you correctly answered the corresponding question on the Fundamentals Exam.  Nonetheless, if you do not feel comfortable with any of them, we suggest you review them using the resources linked below or other class resources.\n"
+@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DEFINING VARIABLES (END)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% LOAD DATA
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+<<load.graded.data, include = FALSE>>=
+## ----Load the GRADED assessment data----
+raw_Data <- read.csv(GRADED_RESULTS_CSV,
+  stringsAsFactors=FALSE)
+
+## Remove students who did not complete the assessment
+iQ <- grepl("GQ_", names(raw_Data)) #Finds which columns have names that include "GQ_"
+# "GQ_" stands for graded question
+completeScores <- raw_Data[!is.na(rowSums(raw_Data[ , iQ])),]  #Looks for rows that are all NAs
+@
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% GENERATE THE STUDENT REPORTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+%% The code below automatically creates a feedback report for each student in the completeScores data frame.
+%% It breaks the report into three sections: 1)Intro, 2) Apparent Strengths, and 3) Apparent Weaknesses.
+%%The items that are included in the strengths or weaknesses sections depends on which items of the assessment they got correct (1) or incorrect (0).
+
+<<create.reports, results='asis', echo=FALSE>>=
+##Loop through each student and create a report based on their item-level results.
+##When code is compiled, the output is one pdf that contains the feedback reports for every students who completed the assessment.
+
+## USERS: If your data file contains columns for Last Name and First Name instead of one column
+#         with students' Full Name, modify the code as indicated below.
+
+for (stdnt in 1:length(completeScores$Name)) {    
+  #For data files with Last and First Name columns: change 'completeScores$Name' to 'completeScores$LAST_NAME in line above
+  
+  tempName <- completeScores$Name[stdnt]
+  #For data files with Last and First Name columns, use the line that is commented out below:
+  #tempName <- paste(completeScores$FIRST_NAME[stdnt], completeScores$LAST_NAME[stdnt], sep = " ")
+  
+  #Grading logic: Did they get item correct? (Looks at all columns of item data)
+  tempIncorrect <- TOPIC_AND_ACTION_FEEDBACK[which(completeScores[stdnt, iQ] == 0)] #0 = incorrect
+  tempCorrect <- TOPIC_AND_ACTION_FEEDBACK[which(completeScores[stdnt, iQ] == 1)] #1= Correct
+
+  
+  #Header of each student's report
+  writeLines(paste("\\section*{",tempName,"}", sep =""))
+  
+  writeLines(paste0("\\subsection*{", REPORT_TITLE, "}"))
+  
+  ## ---Report Introduction---
+  writeLines(REPORT_INTRO)
+  
+  ## ---Apparent Strengths---
+  writeLines("\\subsection*{Apparent Strengths: Review Optional}")
+  writeLines(INTRO_CORRECT)
+    #List
+  cat("\\begin{itemize}")
+  cat(paste("\\item", tempCorrect), sep = "\n")
+  cat("\\end{itemize}")
+  
+  ## ---Apparent Weaknesses---
+  writeLines("\\subsection*{Apparent Weaknesses: Review of These Topics Suggested}")
+  writeLines(INTRO_INCORRECT)
+    #List
+  cat("\\begin{itemize}")
+  cat(paste("\\item", tempIncorrect), sep = "\n")
+  cat("\\end{itemize}")
+  
+  #End page
+  cat("\n\n\\pagebreak\n")
+}
+@
+\end{document}
