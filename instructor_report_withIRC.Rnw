@@ -111,7 +111,7 @@ rawRoster <- read.csv("CourseRosters_Example_2018Sp.csv", stringsAsFactors=FALSE
 #      - Name (1 column; format: first last; 
 #               or you may just choose last name if you have different columns for first and last name)
 #      - Email (1 column; format: myname@myinstitution.edu)
-#      - Section number (1 column; format: a single interger indicating section number;
+#      - Section number (1 column; format: a single integer indicating section number;
 #                         if you have only one section, just populate a column of ones)
 ROSTER_COLUMN_NUMBERS <- c(5,6,1) #Remember: Name, Email, Section Number
 ##  ----Rename the Roster Columns ---
